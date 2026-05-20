@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PaymentDbContext>(opt =>
     opt.UseSqlite("Data Source=payments.db"));
+builder.Services.ConfigureHttpJsonOptions(opts =>
+    opts.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 
 builder.Services.AddSingleton<ITemporalClient>(_ =>
     TemporalClient.ConnectAsync(new("localhost:7233")).GetAwaiter().GetResult());
