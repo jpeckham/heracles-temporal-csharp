@@ -9,6 +9,12 @@ public class AchDbContext(DbContextOptions<AchDbContext> options) : DbContext(op
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AchEntry>()
+            .HasKey(e => e.EntryId);
+
+        modelBuilder.Entity<AchFile>()
+            .HasKey(f => f.FileId);
+
         modelBuilder.Entity<AchFile>()
             .HasMany(f => f.Entries)
             .WithOne()

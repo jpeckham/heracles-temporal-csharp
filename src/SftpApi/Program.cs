@@ -7,7 +7,7 @@ using Temporalio.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SftpDbContext>(opt =>
-    opt.UseSqlite("Data Source=sftp.db"));
+    opt.UseSqlite(builder.Configuration.GetConnectionString("Sftp") ?? "Data Source=sftp.db"));
 builder.Services.AddSingleton<ITemporalClient>(_ =>
     TemporalClient.ConnectAsync(new("localhost:7233")).GetAwaiter().GetResult());
 builder.Services.ConfigureHttpJsonOptions(opts =>

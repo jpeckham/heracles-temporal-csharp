@@ -6,7 +6,7 @@ using Temporalio.Client;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PaymentDbContext>(opt =>
-    opt.UseSqlite("Data Source=payments.db"));
+    opt.UseSqlite(builder.Configuration.GetConnectionString("Payments") ?? "Data Source=payments.db"));
 builder.Services.ConfigureHttpJsonOptions(opts =>
     opts.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 

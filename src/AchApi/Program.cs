@@ -5,7 +5,7 @@ using Shared.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AchDbContext>(opt =>
-    opt.UseSqlite("Data Source=ach.db"));
+    opt.UseSqlite(builder.Configuration.GetConnectionString("Ach") ?? "Data Source=ach.db"));
 builder.Services.ConfigureHttpJsonOptions(opts =>
     opts.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 

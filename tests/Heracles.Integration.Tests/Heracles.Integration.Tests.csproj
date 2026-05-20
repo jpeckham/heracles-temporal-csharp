@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.*" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="Temporalio" Version="1.14.1" />
@@ -24,9 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\PaymentApi\PaymentApi.csproj" />
-    <ProjectReference Include="..\..\src\AchApi\AchApi.csproj" />
-    <ProjectReference Include="..\..\src\SftpApi\SftpApi.csproj" />
+    <ProjectReference Include="..\..\src\PaymentApi\PaymentApi.csproj" Aliases="PaymentApiAssembly" />
+    <ProjectReference Include="..\..\src\AchApi\AchApi.csproj" Aliases="AchApiAssembly" />
+    <ProjectReference Include="..\..\src\SftpApi\SftpApi.csproj" Aliases="SftpApiAssembly" />
     <ProjectReference Include="..\..\src\AchWorker\AchWorker.csproj" />
   </ItemGroup>
 

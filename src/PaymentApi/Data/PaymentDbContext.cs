@@ -9,6 +9,9 @@ public class PaymentDbContext(DbContextOptions<PaymentDbContext> options) : DbCo
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<PaymentActivity>()
+            .HasKey(a => a.ActivityId);
+
         modelBuilder.Entity<Payment>()
             .HasMany(p => p.Activities)
             .WithOne()
