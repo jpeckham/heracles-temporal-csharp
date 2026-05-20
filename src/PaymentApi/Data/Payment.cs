@@ -16,5 +16,5 @@ public class Payment
 
     public string CurrentStatus => Activities.Count == 0
         ? "Pending"
-        : Activities[^1].Type.ToString();
+        : Activities.MaxBy(a => a.OccurredAt)!.Type.ToString();
 }

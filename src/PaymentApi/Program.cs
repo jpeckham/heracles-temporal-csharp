@@ -53,10 +53,11 @@ app.MapPost("/payments", async (CreatePaymentRequest req, PaymentDbContext db, I
 app.MapGet("/payments", async (PaymentDbContext db, string? status) =>
 {
     var payments = await db.Payments.Include(p => p.Activities)
-        .OrderByDescending(p => p.CreatedAt).Take(200).ToListAsync();
-    if (status != null)
-        payments = payments.Where(p => p.CurrentStatus == status).ToList();
-    return Results.Ok(payments.Select(p => new {
+        .OrderByDescending(p => p.CreatedAt).Take(1000).ToListAsync();
+    var result = status != null
+        ? payments.Where(p => p.CurrentStatus == status).ToList()
+        : payments;
+    return Results.Ok(result.Select(p => new {
         p.PaymentId, p.AccountHolderName, p.Amount, p.Type,
         p.AllowsRepresentment, p.CurrentStatus, p.CreatedAt
     }));
