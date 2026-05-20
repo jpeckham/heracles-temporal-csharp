@@ -6,4 +6,13 @@ public class SftpDbContext(DbContextOptions<SftpDbContext> options) : DbContext(
 {
     public DbSet<TransferredFile> TransferredFiles => Set<TransferredFile>();
     public DbSet<ReceivedFile> ReceivedFiles => Set<ReceivedFile>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ReceivedFile>()
+            .HasKey(f => f.FileId);
+
+        modelBuilder.Entity<TransferredFile>()
+            .HasKey(f => f.FileId);
+    }
 }
