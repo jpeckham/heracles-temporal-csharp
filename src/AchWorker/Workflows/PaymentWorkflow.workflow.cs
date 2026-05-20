@@ -49,7 +49,6 @@ public class PaymentWorkflow
     {
         var activityOptions = new ActivityOptions { StartToCloseTimeout = TimeSpan.FromMinutes(2) };
 
-        // SoftAuth on creation (validate routing/account format via PaymentApi)
         await Workflow.ExecuteActivityAsync(
             (PaymentActivities a) => a.HardAuthAsync(paymentId),
             activityOptions);

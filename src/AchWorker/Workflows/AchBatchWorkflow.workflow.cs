@@ -62,7 +62,7 @@ public class AchBatchWorkflow
                 fileId, transferredFileId);
 
             // 7. Signal each payment workflow
-            var isSameDayAch = false;
+            var isSameDayAch = false; // standard ACH — 2 banking day return window
             await Workflow.WhenAllAsync(
                 authorized.Select(id => Workflow.ExecuteActivityAsync(
                     (PaymentActivities a) => a.SignalPaymentAddedToBatchAsync(id, fileId, isSameDayAch),
