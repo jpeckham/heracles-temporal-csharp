@@ -50,16 +50,20 @@ public class AchActivities(IHttpClientFactory httpFactory)
     [Activity]
     public async Task DeleteAchFileIfExistsAsync(Guid fileId)
     {
-        await AchClient.DeleteAsync($"/files/{fileId}");
+        var resp = await AchClient.DeleteAsync($"/files/{fileId}");
+        if (!resp.IsSuccessStatusCode && resp.StatusCode != System.Net.HttpStatusCode.NotFound)
+            throw new ApplicationException($"DeleteAchFile failed: {resp.StatusCode}");
     }
 
     [Activity]
     public async Task RevertAchFileToDraftAsync(Guid fileId)
     {
-        await AchClient.SendAsync(new HttpRequestMessage(HttpMethod.Patch, $"/files/{fileId}/status")
+        var resp = await AchClient.SendAsync(new HttpRequestMessage(HttpMethod.Patch, $"/files/{fileId}/status")
         {
             Content = JsonContent.Create(new { Status = "Draft" })
         });
+        if (!resp.IsSuccessStatusCode)
+            throw new ApplicationException($"RevertAchFileToDraft failed: {resp.StatusCode}");
     }
 
     [Activity]

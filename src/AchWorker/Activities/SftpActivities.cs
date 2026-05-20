@@ -37,10 +37,12 @@ public class SftpActivities(IHttpClientFactory httpFactory)
     [Activity]
     public async Task MarkReceivedFileProcessedAsync(Guid receivedFileId)
     {
-        await SftpClient.SendAsync(new HttpRequestMessage(HttpMethod.Patch, $"/files/inbound/{receivedFileId}/status")
+        var resp = await SftpClient.SendAsync(new HttpRequestMessage(HttpMethod.Patch, $"/files/inbound/{receivedFileId}/status")
         {
             Content = JsonContent.Create(new { Status = "Processed" })
         });
+        if (!resp.IsSuccessStatusCode)
+            throw new ApplicationException($"MarkReceivedFileProcessed failed: {resp.StatusCode}");
     }
 
     private record ContentResponse(string ContentBase64);
