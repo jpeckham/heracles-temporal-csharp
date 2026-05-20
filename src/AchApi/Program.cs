@@ -25,14 +25,20 @@ app.MapPost("/files", async (AchDbContext db) =>
 
 // GET /files
 app.MapGet("/files", async (AchDbContext db) =>
-    Results.Ok(await db.AchFiles.OrderByDescending(f => f.CreatedAt).ToListAsync()));
+{
+    var files = await db.AchFiles.OrderByDescending(f => f.CreatedAt)
+        .Select(f => new { f.FileId, f.BatchNumber, f.Status, f.CreatedAt, f.FinalizedAt })
+        .ToListAsync();
+    return Results.Ok(files);
+});
 
 // POST /files/{id}/entries/full
 app.MapPost("/files/{id:guid}/entries/full", async (Guid id, AchEntryFullRequest req, AchDbContext db) =>
 {
     var file = await db.AchFiles.FindAsync(id);
-    if (file is null || file.Status != AchFileStatus.Draft)
-        return Results.BadRequest("File not found or not in Draft status.");
+    if (file is null) return Results.NotFound();
+    if (file.Status != AchFileStatus.Draft)
+        return Results.BadRequest("File is not in Draft status.");
 
     var entry = new AchEntry
     {
@@ -101,8 +107,9 @@ app.MapMethods("/files/{id:guid}/status", ["PATCH"], async (Guid id, UpdateStatu
 {
     var file = await db.AchFiles.FindAsync(id);
     if (file is null) return Results.NotFound();
-    if (Enum.TryParse<AchFileStatus>(req.Status, out var status))
-        file.Status = status;
+    if (!Enum.TryParse<AchFileStatus>(req.Status, out var status))
+        return Results.BadRequest($"Invalid status: {req.Status}");
+    file.Status = status;
     await db.SaveChangesAsync();
     return Results.Ok();
 });

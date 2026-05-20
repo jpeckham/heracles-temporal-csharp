@@ -58,8 +58,8 @@ public static class NachaFileGenerator
             $"{totalDebits.ToString().PadLeft(12, '0')}{totalCredits.ToString().PadLeft(12, '0')}" +
             $"{CompanyId}{"".PadRight(25)}{OdfiRouting}{batchNumber}", 94));
 
-        var totalRecords = entries.Count + 4;
-        var blockCount = (int)Math.Ceiling((totalRecords + 1) / 10.0);
+        var totalRecords = entries.Count + 4; // entries + file header + batch header + batch control + file control
+        var blockCount = (int)Math.Ceiling(totalRecords / 10.0);
         sb.AppendLine(Pad(
             $"9000001{blockCount.ToString().PadLeft(6, '0')}" +
             $"{entries.Count.ToString().PadLeft(8, '0')}{hashMod}" +
