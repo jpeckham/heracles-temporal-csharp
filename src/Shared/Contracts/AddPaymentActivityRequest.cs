@@ -1,7 +1,9 @@
+using Shared.Models;
+
 namespace Shared.Contracts;
 
 public record AddPaymentActivityRequest(
-    string Type,           // PaymentActivityType name
+    PaymentActivityType Type,
     decimal? Amount = null,
     string? ReferenceCode = null,
     string? Notes = null);

@@ -1,3 +1,5 @@
+using Shared.Models;
+
 namespace Shared.Contracts;
 
 public record CreatePaymentRequest(
@@ -5,5 +7,5 @@ public record CreatePaymentRequest(
     string AccountNumber,
     string AccountHolderName,
     decimal Amount,
-    string Type,           // "Credit" or "Debit"
+    PaymentType Type,
     bool AllowsRepresentment);
