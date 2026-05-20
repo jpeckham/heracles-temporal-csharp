@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+    <PackageReference Include="System.Net.Http.Json" Version="8.0.1" />
     <PackageReference Include="Temporalio" Version="1.14.1" />
     <PackageReference Include="Temporalio.Extensions.Hosting" Version="1.14.1" />
   </ItemGroup>
