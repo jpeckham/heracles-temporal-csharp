@@ -1,0 +1,6 @@
+@AchApi_HostAddress = http://localhost:5286
+
+GET {{AchApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
