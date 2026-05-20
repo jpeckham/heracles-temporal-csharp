@@ -1,6 +1,0 @@
-@SftpApi_HostAddress = http://localhost:5054
-
-GET {{SftpApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
