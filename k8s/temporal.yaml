@@ -45,10 +45,10 @@ metadata:
   name: temporal-ui
   namespace: heracles
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: temporal
   ports:
     - port: 8233
       targetPort: 8233
-      nodePort: 30088
+

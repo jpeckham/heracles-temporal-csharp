@@ -46,7 +46,8 @@ kubectl rollout status deployment/ach-worker  -n heracles --timeout=120s
 
 Write-Host ""
 Write-Host "Done. Endpoints:" -ForegroundColor Green
-Write-Host "  PaymentApi   -> http://localhost:30081"
-Write-Host "  AchApi       -> http://localhost:30082"
-Write-Host "  SftpApi      -> http://localhost:30083"
-Write-Host "  Temporal UI  -> http://localhost:30088"
+Write-Host "  PaymentApi   -> http://localhost:8081"
+Write-Host "  AchApi       -> http://localhost:8082"
+Write-Host "  SftpApi      -> http://localhost:8083"
+Write-Host "  Temporal UI  -> http://localhost:8233"
+

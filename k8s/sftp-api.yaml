@@ -35,10 +35,11 @@ metadata:
   name: sftp-api
   namespace: heracles
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: sftp-api
   ports:
-    - port: 8080
+    - port: 8083
       targetPort: 8080
-      nodePort: 30083
+
+
