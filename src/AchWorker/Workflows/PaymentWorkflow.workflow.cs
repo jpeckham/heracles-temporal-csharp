@@ -49,11 +49,7 @@ public class PaymentWorkflow
     {
         var activityOptions = new ActivityOptions { StartToCloseTimeout = TimeSpan.FromMinutes(2) };
 
-        await Workflow.ExecuteActivityAsync(
-            (PaymentActivities a) => a.HardAuthAsync(paymentId),
-            activityOptions);
-
-        // Wait for inclusion in a batch
+        // Wait for inclusion in a batch (HardAuth is performed by AchBatchWorkflow)
         await Workflow.WaitConditionAsync(() => _batchDetails != null);
 
         while (true)
