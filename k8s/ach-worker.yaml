@@ -29,8 +29,8 @@ spec:
                   name: heracles-config
                   key: TEMPORAL__NAMESPACE
             - name: SERVICES__PAYMENTAPI
-              value: "http://payment-api:8080"
+              value: "http://payment-api:8081"
             - name: SERVICES__ACHAPI
-              value: "http://ach-api:8080"
+              value: "http://ach-api:8082"
             - name: SERVICES__SFTPAPI
-              value: "http://sftp-api:8080"
+              value: "http://sftp-api:8083"

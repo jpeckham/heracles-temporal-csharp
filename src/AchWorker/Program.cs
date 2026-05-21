@@ -59,8 +59,10 @@ public class ScheduleRegistrationService(ITemporalClient client, ILogger<Schedul
 
             logger.LogInformation("Daily ACH batch schedule registered");
         }
-        catch (Temporalio.Exceptions.RpcException ex)
-            when (ex.Code == Temporalio.Exceptions.RpcException.StatusCode.AlreadyExists)
+        catch (Exception ex) when (
+            ex is Temporalio.Exceptions.ScheduleAlreadyRunningException ||
+            (ex is Temporalio.Exceptions.RpcException rpc &&
+             rpc.Code == Temporalio.Exceptions.RpcException.StatusCode.AlreadyExists))
         {
             logger.LogInformation("Daily ACH batch schedule already exists — skipping");
         }

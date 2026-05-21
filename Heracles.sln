@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heracles.Workflow.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heracles.Integration.Tests", "tests\Heracles.Integration.Tests\Heracles.Integration.Tests.csproj", "{8BB21E1F-CE5F-49A3-8761-30C308992F5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heracles.E2E.Tests", "tests\Heracles.E2E.Tests\Heracles.E2E.Tests.csproj", "{3EABF99E-640C-4E52-88F7-1F9D994D5936}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,18 @@ Global
 		{8BB21E1F-CE5F-49A3-8761-30C308992F5C}.Release|x64.Build.0 = Release|Any CPU
 		{8BB21E1F-CE5F-49A3-8761-30C308992F5C}.Release|x86.ActiveCfg = Release|Any CPU
 		{8BB21E1F-CE5F-49A3-8761-30C308992F5C}.Release|x86.Build.0 = Release|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Debug|x64.Build.0 = Debug|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Debug|x86.Build.0 = Debug|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Release|x64.ActiveCfg = Release|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Release|x64.Build.0 = Release|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Release|x86.ActiveCfg = Release|Any CPU
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,5 +156,6 @@ Global
 		{FC973278-2775-4EA9-BA30-A576BA8CD14D} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{5D2D7A7F-A0E8-4308-AB29-615E9326C6AA} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{8BB21E1F-CE5F-49A3-8761-30C308992F5C} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{3EABF99E-640C-4E52-88F7-1F9D994D5936} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal
