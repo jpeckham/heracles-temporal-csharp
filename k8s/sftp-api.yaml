@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: sftp-api
-          image: heracles/sftp-api:latest
-          imagePullPolicy: Never
+          image: localhost:5000/heracles/sftp-api:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:

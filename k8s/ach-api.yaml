@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: ach-api
-          image: heracles/ach-api:latest
-          imagePullPolicy: Never
+          image: localhost:5000/heracles/ach-api:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:

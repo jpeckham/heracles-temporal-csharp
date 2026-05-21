@@ -15,15 +15,8 @@ spec:
     spec:
       containers:
         - name: temporal
-          image: temporalio/temporal-cli:latest
-          command: ["temporal", "server", "start-dev"]
-          args:
-            - "--ip"
-            - "0.0.0.0"
-            - "--port"
-            - "7233"
-            - "--ui-port"
-            - "8233"
+          image: localhost:5000/heracles/temporal-dev:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 7233
               name: grpc

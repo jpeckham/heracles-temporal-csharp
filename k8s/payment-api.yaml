@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: payment-api
-          image: heracles/payment-api:latest
-          imagePullPolicy: Never
+          image: localhost:5000/heracles/payment-api:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:

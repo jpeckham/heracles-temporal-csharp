@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: ach-worker
-          image: heracles/ach-worker:latest
-          imagePullPolicy: Never
+          image: localhost:5000/heracles/ach-worker:latest
+          imagePullPolicy: Always
           env:
             - name: TEMPORAL__ADDRESS
               valueFrom:
