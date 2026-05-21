@@ -122,7 +122,7 @@ public class AchBatchWorkflowTests
         workerOptions.AddAllActivities(new MockAddEntry((_, _, _) => Task.FromResult(Guid.NewGuid())));
         workerOptions.AddAllActivities(new MockFinalizeAchFile(_ => Task.CompletedTask));
         workerOptions.AddAllActivities(new MockTransferAchFile(_ =>
-            throw new ApplicationException("SFTP connection failed")));
+            throw new ApplicationFailureException("SFTP connection failed", nonRetryable: true)));
         workerOptions.AddAllActivities(new MockDeleteAchFileIfExists(_ =>
         {
             deleteAchFileCalled = true;
