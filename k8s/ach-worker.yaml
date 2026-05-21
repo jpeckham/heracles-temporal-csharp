@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ach-worker
+  namespace: heracles
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ach-worker
+  template:
+    metadata:
+      labels:
+        app: ach-worker
+    spec:
+      containers:
+        - name: ach-worker
+          image: heracles/ach-worker:latest
+          imagePullPolicy: Never
+          env:
+            - name: TEMPORAL__ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: heracles-config
+                  key: TEMPORAL__ADDRESS
+            - name: TEMPORAL__NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  name: heracles-config
+                  key: TEMPORAL__NAMESPACE
+            - name: SERVICES__PAYMENTAPI
+              value: "http://payment-api:8080"
+            - name: SERVICES__ACHAPI
+              value: "http://ach-api:8080"
+            - name: SERVICES__SFTPAPI
+              value: "http://sftp-api:8080"

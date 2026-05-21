@@ -9,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SftpDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("Sftp") ?? "Data Source=sftp.db"));
 builder.Services.AddSingleton<ITemporalClient>(_ =>
-    TemporalClient.ConnectAsync(new("localhost:7233")).GetAwaiter().GetResult());
+    TemporalClient.ConnectAsync(new(
+        builder.Configuration["Temporal:Address"] ?? "localhost:7233")).GetAwaiter().GetResult());
 builder.Services.ConfigureHttpJsonOptions(opts =>
     opts.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 

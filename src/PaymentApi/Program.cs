@@ -11,7 +11,8 @@ builder.Services.ConfigureHttpJsonOptions(opts =>
     opts.SerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 
 builder.Services.AddSingleton<ITemporalClient>(_ =>
-    TemporalClient.ConnectAsync(new("localhost:7233")).GetAwaiter().GetResult());
+    TemporalClient.ConnectAsync(new(
+        builder.Configuration["Temporal:Address"] ?? "localhost:7233")).GetAwaiter().GetResult());
 
 var app = builder.Build();
 
