@@ -4,7 +4,7 @@ metadata:
   name: heracles-config
   namespace: heracles
 data:
-  TEMPORAL__ADDRESS: "host.docker.internal:7233"
+  TEMPORAL__ADDRESS: "temporal:7233"
   TEMPORAL__NAMESPACE: "default"
   ConnectionStrings__Payments: "Data Source=/data/payments.db"
   ConnectionStrings__Ach: "Data Source=/data/ach.db"
