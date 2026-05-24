@@ -1,0 +1,3 @@
+namespace AchWorker.UseCases.MarkReceivedFileProcessed;
+
+public record MarkReceivedFileProcessedRequestModel(Guid ReceivedFileId);

@@ -1,3 +1,4 @@
+using AchApi.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AchApi.Data;

@@ -1,4 +1,23 @@
 using AchWorker.Activities;
+using AchWorker.Gateways;
+using AchWorker.OutputAdapters;
+using AchWorker.UseCases.AddAchEntry;
+using AchWorker.UseCases.CollectPendingPayments;
+using AchWorker.UseCases.CreateAchFile;
+using AchWorker.UseCases.DeleteAchFile;
+using AchWorker.UseCases.DeleteTransferredFile;
+using AchWorker.UseCases.FinalizeAchFile;
+using AchWorker.UseCases.HardAuthorizePayment;
+using AchWorker.UseCases.MarkReceivedFileProcessed;
+using AchWorker.UseCases.ParseReturnFile;
+using AchWorker.UseCases.RecordAchReturn;
+using AchWorker.UseCases.RecordRepresentment;
+using AchWorker.UseCases.RecordSettlement;
+using AchWorker.UseCases.RevertAchFileToDraft;
+using AchWorker.UseCases.SignalBankReturn;
+using AchWorker.UseCases.SignalPaymentAddedToBatch;
+using AchWorker.UseCases.TransferAchFile;
+using AchWorker.UseCases.VoidPaymentAuth;
 using AchWorker.Workflows;
 using Temporalio.Client;
 using Temporalio.Client.Schedules;
@@ -16,6 +35,31 @@ builder.Services.AddHttpClient("SftpApi", c =>
 builder.Services.AddSingleton<ITemporalClient>(_ =>
     TemporalClient.ConnectAsync(new(
         builder.Configuration["Temporal:Address"] ?? "localhost:7233")).GetAwaiter().GetResult());
+
+// Output adapters (gateway implementations)
+builder.Services.AddScoped<IAchFileGateway, AchApiGateway>();
+builder.Services.AddScoped<IPaymentGateway, PaymentApiGateway>();
+builder.Services.AddScoped<ISftpGateway, SftpApiGateway>();
+builder.Services.AddScoped<IPaymentSignalGateway, PaymentSignalGateway>();
+
+// Use case interactors
+builder.Services.AddScoped<ICollectPendingPaymentsInputBoundary, CollectPendingPaymentsInteractor>();
+builder.Services.AddScoped<IHardAuthorizePaymentInputBoundary, HardAuthorizePaymentInteractor>();
+builder.Services.AddScoped<IVoidPaymentAuthInputBoundary, VoidPaymentAuthInteractor>();
+builder.Services.AddScoped<ICreateAchFileInputBoundary, CreateAchFileInteractor>();
+builder.Services.AddScoped<IAddAchEntryInputBoundary, AddAchEntryInteractor>();
+builder.Services.AddScoped<IFinalizeAchFileInputBoundary, FinalizeAchFileInteractor>();
+builder.Services.AddScoped<IDeleteAchFileInputBoundary, DeleteAchFileInteractor>();
+builder.Services.AddScoped<IRevertAchFileToDraftInputBoundary, RevertAchFileToDraftInteractor>();
+builder.Services.AddScoped<IDeleteTransferredFileInputBoundary, DeleteTransferredFileInteractor>();
+builder.Services.AddScoped<ITransferAchFileInputBoundary, TransferAchFileInteractor>();
+builder.Services.AddScoped<ISignalPaymentAddedToBatchInputBoundary, SignalPaymentAddedToBatchInteractor>();
+builder.Services.AddScoped<ISignalBankReturnInputBoundary, SignalBankReturnInteractor>();
+builder.Services.AddScoped<IRecordSettlementInputBoundary, RecordSettlementInteractor>();
+builder.Services.AddScoped<IRecordAchReturnInputBoundary, RecordAchReturnInteractor>();
+builder.Services.AddScoped<IRecordRepresentmentInputBoundary, RecordRepresentmentInteractor>();
+builder.Services.AddScoped<IParseReturnFileInputBoundary, ParseReturnFileInteractor>();
+builder.Services.AddScoped<IMarkReceivedFileProcessedInputBoundary, MarkReceivedFileProcessedInteractor>();
 
 builder.Services
     .AddHostedTemporalWorker(

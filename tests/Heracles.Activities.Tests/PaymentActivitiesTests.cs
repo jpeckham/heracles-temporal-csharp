@@ -1,7 +1,15 @@
 using AchWorker.Activities;
+using AchWorker.OutputAdapters;
+using AchWorker.UseCases.CollectPendingPayments;
+using AchWorker.UseCases.HardAuthorizePayment;
+using AchWorker.UseCases.RecordAchReturn;
+using AchWorker.UseCases.RecordRepresentment;
+using AchWorker.UseCases.RecordSettlement;
+using AchWorker.UseCases.SignalBankReturn;
+using AchWorker.UseCases.SignalPaymentAddedToBatch;
+using AchWorker.UseCases.VoidPaymentAuth;
 using NSubstitute;
 using Shared.Contracts;
-using Shared.Models;
 using Temporalio.Testing;
 using Xunit;
 
@@ -15,11 +23,24 @@ public class PaymentActivitiesTests
         var httpClient = new HttpClient(handler) { BaseAddress = new Uri("http://payment-api") };
         var factory = Substitute.For<IHttpClientFactory>();
         factory.CreateClient("PaymentApi").Returns(httpClient);
-        factory.CreateClient("AchApi").Returns(new HttpClient());
-        factory.CreateClient("SftpApi").Returns(new HttpClient());
 
         var temporalClient = Substitute.For<Temporalio.Client.ITemporalClient>();
-        return new PaymentActivities(factory, temporalClient);
+        return BuildPaymentActivities(factory, temporalClient);
+    }
+
+    private static PaymentActivities BuildPaymentActivities(IHttpClientFactory factory, Temporalio.Client.ITemporalClient temporalClient)
+    {
+        var paymentGateway = new PaymentApiGateway(factory);
+        var signalGateway = new PaymentSignalGateway(temporalClient);
+        return new PaymentActivities(
+            new CollectPendingPaymentsInteractor(paymentGateway),
+            new HardAuthorizePaymentInteractor(paymentGateway),
+            new VoidPaymentAuthInteractor(paymentGateway),
+            new RecordSettlementInteractor(paymentGateway),
+            new RecordAchReturnInteractor(paymentGateway),
+            new RecordRepresentmentInteractor(paymentGateway),
+            new SignalPaymentAddedToBatchInteractor(signalGateway),
+            new SignalBankReturnInteractor(signalGateway));
     }
 
     [Fact]
@@ -80,10 +101,8 @@ public class PaymentActivitiesTests
         var httpClient = new HttpClient(handler) { BaseAddress = new Uri("http://payment-api") };
         var factory = Substitute.For<IHttpClientFactory>();
         factory.CreateClient("PaymentApi").Returns(httpClient);
-        factory.CreateClient("AchApi").Returns(new HttpClient());
-        factory.CreateClient("SftpApi").Returns(new HttpClient());
         var temporalClient = Substitute.For<Temporalio.Client.ITemporalClient>();
-        var activities = new PaymentActivities(factory, temporalClient);
+        var activities = BuildPaymentActivities(factory, temporalClient);
 
         var env = new ActivityEnvironment();
         await env.RunAsync(() => activities.RecordSettlementAsync(Guid.NewGuid()));

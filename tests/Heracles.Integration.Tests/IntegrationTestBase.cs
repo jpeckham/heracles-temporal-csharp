@@ -3,13 +3,31 @@ extern alias AchApiAssembly;
 extern alias SftpApiAssembly;
 
 using AchWorker.Activities;
+using AchWorker.OutputAdapters;
+using AchWorker.UseCases.AddAchEntry;
+using AchWorker.UseCases.CollectPendingPayments;
+using AchWorker.UseCases.CreateAchFile;
+using AchWorker.UseCases.DeleteAchFile;
+using AchWorker.UseCases.DeleteTransferredFile;
+using AchWorker.UseCases.FinalizeAchFile;
+using AchWorker.UseCases.HardAuthorizePayment;
+using AchWorker.UseCases.MarkReceivedFileProcessed;
+using AchWorker.UseCases.ParseReturnFile;
+using AchWorker.UseCases.RecordAchReturn;
+using AchWorker.UseCases.RecordRepresentment;
+using AchWorker.UseCases.RecordSettlement;
+using AchWorker.UseCases.RevertAchFileToDraft;
+using AchWorker.UseCases.SignalBankReturn;
+using AchWorker.UseCases.SignalPaymentAddedToBatch;
+using AchWorker.UseCases.TransferAchFile;
+using AchWorker.UseCases.VoidPaymentAuth;
 using AchWorker.Workflows;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Temporalio.Client;
 using Temporalio.Testing;
 using Temporalio.Worker;
-using Microsoft.Extensions.Configuration;
 
 namespace Heracles.Integration.Tests;
 
@@ -72,14 +90,36 @@ public class IntegrationTestBase : IAsyncLifetime
 
         var httpFactory = new TestHttpClientFactory(PaymentClient, AchClient, SftpClient);
 
+        var achGateway = new AchApiGateway(httpFactory);
+        var paymentGateway = new PaymentApiGateway(httpFactory);
+        var sftpGateway = new SftpApiGateway(httpFactory);
+        var signalGateway = new PaymentSignalGateway(TemporalEnv.Client);
+
         Worker = new TemporalWorker(TemporalEnv.Client,
             new TemporalWorkerOptions("ach-worker")
                 .AddWorkflow<PaymentWorkflow>()
                 .AddWorkflow<AchBatchWorkflow>()
                 .AddWorkflow<AchReturnWorkflow>()
-                .AddAllActivities(new PaymentActivities(httpFactory, TemporalEnv.Client))
-                .AddAllActivities(new AchActivities(httpFactory))
-                .AddAllActivities(new SftpActivities(httpFactory)));
+                .AddAllActivities(new PaymentActivities(
+                    new CollectPendingPaymentsInteractor(paymentGateway),
+                    new HardAuthorizePaymentInteractor(paymentGateway),
+                    new VoidPaymentAuthInteractor(paymentGateway),
+                    new RecordSettlementInteractor(paymentGateway),
+                    new RecordAchReturnInteractor(paymentGateway),
+                    new RecordRepresentmentInteractor(paymentGateway),
+                    new SignalPaymentAddedToBatchInteractor(signalGateway),
+                    new SignalBankReturnInteractor(signalGateway)))
+                .AddAllActivities(new AchActivities(
+                    new CreateAchFileInteractor(achGateway),
+                    new AddAchEntryInteractor(achGateway, paymentGateway),
+                    new FinalizeAchFileInteractor(achGateway),
+                    new DeleteAchFileInteractor(achGateway),
+                    new RevertAchFileToDraftInteractor(achGateway),
+                    new ParseReturnFileInteractor(sftpGateway)))
+                .AddAllActivities(new SftpActivities(
+                    new TransferAchFileInteractor(achGateway, sftpGateway),
+                    new DeleteTransferredFileInteractor(sftpGateway),
+                    new MarkReceivedFileProcessedInteractor(sftpGateway))));
     }
 
     public async Task DisposeAsync()

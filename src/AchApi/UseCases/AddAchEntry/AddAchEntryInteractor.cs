@@ -1,0 +1,39 @@
+using AchApi.Entities;
+using AchApi.Gateways;
+using Shared.Models;
+
+namespace AchApi.UseCases.AddAchEntry;
+
+public class AddAchEntryInteractor(IAchFileGateway gateway) : IAddAchEntryInputBoundary
+{
+    public async Task AddAchEntryAsync(IAddAchEntryOutputBoundary presenter, AddAchEntryRequestModel request)
+    {
+        var file = await gateway.GetAchFileByIdAsync(request.FileId);
+        if (file is null)
+        {
+            presenter.PresentNotFound();
+            return;
+        }
+
+        if (file.Status != AchFileStatus.Draft)
+        {
+            presenter.PresentBadRequest("File is not in Draft status.");
+            return;
+        }
+
+        var entry = new AchEntry
+        {
+            FileId = request.FileId,
+            PaymentId = request.PaymentId,
+            RoutingNumber = request.RoutingNumber,
+            AccountNumber = request.AccountNumber,
+            AccountHolderName = request.AccountHolderName,
+            Amount = request.Amount,
+            TransactionCode = request.Type == "Credit" ? "22" : "27",
+            RepresentmentCount = request.RepresentmentCount
+        };
+
+        var saved = await gateway.AddAchEntryAsync(entry);
+        presenter.Present(new AddAchEntryResponseModel(saved.EntryId));
+    }
+}
