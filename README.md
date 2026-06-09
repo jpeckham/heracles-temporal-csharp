@@ -66,6 +66,10 @@ POST /files/inbound → AchReturnWorkflow
 | `Returned` | ACH return received |
 | `Representment` | Re-submitted after R01 return |
 
+### Payment Request Validation
+
+`POST /payments` rejects invalid ACH payment input before starting a workflow. Amounts must be between `0.01` and `99,999,999.99`, routing numbers must be exactly 9 digits, account numbers are required and limited to 17 characters, and account holder names are limited to 22 characters for NACHA output.
+
 ### NACHA File Generation
 
 `AchApi` generates NACHA files via `NachaFileGenerator`. Transaction codes: `22` = debit, `27` = credit. The `AchWorker` parses return files by finding addenda lines (record type `7`), extracting the R-code from positions 3–5 and the payment GUID from positions 13–48.
