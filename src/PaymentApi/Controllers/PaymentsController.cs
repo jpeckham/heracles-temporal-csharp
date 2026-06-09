@@ -24,6 +24,8 @@ public class PaymentsController(
     {
         if (req.Amount <= 0 || req.Amount > 99_999_999.99m)
             return BadRequest("Amount must be between 0.01 and 99,999,999.99.");
+        if (string.IsNullOrWhiteSpace(req.RoutingNumber))
+            return BadRequest("Routing number is required.");
         if (req.RoutingNumber.Length != 9 || !req.RoutingNumber.All(char.IsDigit))
             return BadRequest("Routing number must be 9 digits.");
         if (string.IsNullOrWhiteSpace(req.AccountNumber))
