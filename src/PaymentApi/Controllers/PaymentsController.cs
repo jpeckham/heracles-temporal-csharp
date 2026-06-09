@@ -30,6 +30,8 @@ public class PaymentsController(
             return BadRequest("Account number is required.");
         if (req.AccountNumber.Length > 17)
             return BadRequest("Account number must be 17 chars or fewer.");
+        if (string.IsNullOrWhiteSpace(req.AccountHolderName))
+            return BadRequest("Account holder name is required.");
         if (req.AccountHolderName.Length > 22)
             return BadRequest("Account holder name must be 22 chars or fewer (NACHA limit).");
 

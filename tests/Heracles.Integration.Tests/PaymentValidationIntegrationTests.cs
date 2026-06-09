@@ -24,4 +24,21 @@ public class PaymentValidationIntegrationTests : IntegrationTestBase
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Equal("Account number is required.", await response.Content.ReadAsStringAsync());
     }
+
+    [Fact]
+    public async Task CreatePayment_WithBlankAccountHolderName_ReturnsBadRequest()
+    {
+        var request = new CreatePaymentRequest(
+            RoutingNumber: "021000021",
+            AccountNumber: "123456789",
+            AccountHolderName: "   ",
+            Amount: 25.00m,
+            Type: PaymentType.Credit,
+            AllowsRepresentment: true);
+
+        var response = await PaymentClient.PostAsJsonAsync("/payments", request);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("Account holder name is required.", await response.Content.ReadAsStringAsync());
+    }
 }
