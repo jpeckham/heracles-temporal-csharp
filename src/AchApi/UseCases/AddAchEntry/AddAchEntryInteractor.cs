@@ -21,6 +21,12 @@ public class AddAchEntryInteractor(IAchFileGateway gateway) : IAddAchEntryInputB
             return;
         }
 
+        if (request.Type != "Credit" && request.Type != "Debit")
+        {
+            presenter.PresentBadRequest("Entry type must be Credit or Debit.");
+            return;
+        }
+
         var entry = new AchEntry
         {
             FileId = request.FileId,
