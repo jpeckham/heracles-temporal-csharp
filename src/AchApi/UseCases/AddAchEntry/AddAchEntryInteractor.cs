@@ -33,6 +33,12 @@ public class AddAchEntryInteractor(IAchFileGateway gateway) : IAddAchEntryInputB
             return;
         }
 
+        if (request.AccountNumber.Length > 17)
+        {
+            presenter.PresentBadRequest("Account number must be 17 chars or fewer.");
+            return;
+        }
+
         if (request.Type != "Credit" && request.Type != "Debit")
         {
             presenter.PresentBadRequest("Entry type must be Credit or Debit.");

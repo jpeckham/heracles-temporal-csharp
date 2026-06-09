@@ -77,7 +77,7 @@ Accepted routing numbers, account numbers, and account holder names are stored w
 ### NACHA File Generation
 
 `AchApi` generates NACHA files via `NachaFileGenerator`. Transaction codes: `22` = debit, `27` = credit. The `AchWorker` parses return files by finding addenda lines (record type `7`), extracting the R-code from positions 3–5 and the payment GUID from positions 13–48.
-Direct `POST /files/{id}/entries/full` requests must use an entry type of `Credit` or `Debit`, a positive amount, and a routing number with exactly 9 digits.
+Direct `POST /files/{id}/entries/full` requests must use an entry type of `Credit` or `Debit`, a positive amount, a routing number with exactly 9 digits, and an account number of 17 characters or fewer.
 
 ## Project Structure
 

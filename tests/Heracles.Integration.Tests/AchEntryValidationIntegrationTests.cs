@@ -69,5 +69,26 @@ public class AchEntryValidationIntegrationTests : IntegrationTestBase
         Assert.Equal("Routing number must be 9 digits.", await entryResponse.Content.ReadAsStringAsync());
     }
 
+    [Fact]
+    public async Task AddEntry_WithAccountNumberLongerThan17Characters_ReturnsBadRequest()
+    {
+        var createResponse = await AchClient.PostAsync("/files", null);
+        createResponse.EnsureSuccessStatusCode();
+        var created = await createResponse.Content.ReadFromJsonAsync<CreateAchFileResponse>();
+
+        var entryResponse = await AchClient.PostAsJsonAsync($"/files/{created!.FileId}/entries/full", new
+        {
+            PaymentId = Guid.NewGuid(),
+            RoutingNumber = "021000021",
+            AccountNumber = "123456789012345678",
+            AccountHolderName = "Jane Doe",
+            Amount = 25.00m,
+            Type = "Credit"
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, entryResponse.StatusCode);
+        Assert.Equal("Account number must be 17 chars or fewer.", await entryResponse.Content.ReadAsStringAsync());
+    }
+
     private record CreateAchFileResponse(Guid FileId, int BatchNumber);
 }
