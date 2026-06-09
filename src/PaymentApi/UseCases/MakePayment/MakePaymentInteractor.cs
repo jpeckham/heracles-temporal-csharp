@@ -10,9 +10,9 @@ public class MakePaymentInteractor(IPaymentGateway paymentGateway, IPaymentEvent
     {
         var payment = new Payment
         {
-            RoutingNumber = request.RoutingNumber,
-            AccountNumber = request.AccountNumber,
-            AccountHolderName = request.AccountHolderName,
+            RoutingNumber = request.RoutingNumber.Trim(),
+            AccountNumber = request.AccountNumber.Trim(),
+            AccountHolderName = request.AccountHolderName.Trim(),
             Amount = request.Amount,
             Type = request.Type,
             AllowsRepresentment = request.AllowsRepresentment
