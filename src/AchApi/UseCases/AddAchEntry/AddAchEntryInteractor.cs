@@ -21,6 +21,12 @@ public class AddAchEntryInteractor(IAchFileGateway gateway) : IAddAchEntryInputB
             return;
         }
 
+        if (request.Amount <= 0)
+        {
+            presenter.PresentBadRequest("Entry amount must be positive.");
+            return;
+        }
+
         if (request.Type != "Credit" && request.Type != "Debit")
         {
             presenter.PresentBadRequest("Entry type must be Credit or Debit.");
