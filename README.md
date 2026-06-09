@@ -67,6 +67,7 @@ POST /files/inbound → AchReturnWorkflow
 | `Representment` | Re-submitted after R01 return |
 
 `GET /payments?status=...` filters by the derived status name case-insensitively and ignores surrounding whitespace.
+Payment activity reference codes and notes are stored without surrounding whitespace.
 
 ### Payment Request Validation
 

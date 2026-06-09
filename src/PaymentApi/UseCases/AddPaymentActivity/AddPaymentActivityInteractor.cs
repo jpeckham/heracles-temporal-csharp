@@ -19,8 +19,8 @@ public class AddPaymentActivityInteractor(IPaymentGateway paymentGateway) : IAdd
             PaymentId = request.PaymentId,
             Type = request.Type,
             Amount = request.Amount,
-            ReferenceCode = request.ReferenceCode,
-            Notes = request.Notes
+            ReferenceCode = request.ReferenceCode?.Trim(),
+            Notes = request.Notes?.Trim()
         };
 
         await paymentGateway.SaveActivityAsync(activity);
