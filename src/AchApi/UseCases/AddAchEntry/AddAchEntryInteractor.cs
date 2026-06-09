@@ -27,6 +27,12 @@ public class AddAchEntryInteractor(IAchFileGateway gateway) : IAddAchEntryInputB
             return;
         }
 
+        if (request.RoutingNumber.Length != 9 || !request.RoutingNumber.All(char.IsDigit))
+        {
+            presenter.PresentBadRequest("Routing number must be 9 digits.");
+            return;
+        }
+
         if (request.Type != "Credit" && request.Type != "Debit")
         {
             presenter.PresentBadRequest("Entry type must be Credit or Debit.");
