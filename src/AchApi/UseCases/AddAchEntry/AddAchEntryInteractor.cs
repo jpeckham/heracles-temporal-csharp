@@ -33,6 +33,12 @@ public class AddAchEntryInteractor(IAchFileGateway gateway) : IAddAchEntryInputB
             return;
         }
 
+        if (string.IsNullOrWhiteSpace(request.AccountNumber))
+        {
+            presenter.PresentBadRequest("Account number is required.");
+            return;
+        }
+
         if (request.AccountNumber.Length > 17)
         {
             presenter.PresentBadRequest("Account number must be 17 chars or fewer.");

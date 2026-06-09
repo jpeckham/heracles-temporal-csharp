@@ -90,5 +90,26 @@ public class AchEntryValidationIntegrationTests : IntegrationTestBase
         Assert.Equal("Account number must be 17 chars or fewer.", await entryResponse.Content.ReadAsStringAsync());
     }
 
+    [Fact]
+    public async Task AddEntry_WithBlankAccountNumber_ReturnsBadRequest()
+    {
+        var createResponse = await AchClient.PostAsync("/files", null);
+        createResponse.EnsureSuccessStatusCode();
+        var created = await createResponse.Content.ReadFromJsonAsync<CreateAchFileResponse>();
+
+        var entryResponse = await AchClient.PostAsJsonAsync($"/files/{created!.FileId}/entries/full", new
+        {
+            PaymentId = Guid.NewGuid(),
+            RoutingNumber = "021000021",
+            AccountNumber = "   ",
+            AccountHolderName = "Jane Doe",
+            Amount = 25.00m,
+            Type = "Credit"
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, entryResponse.StatusCode);
+        Assert.Equal("Account number is required.", await entryResponse.Content.ReadAsStringAsync());
+    }
+
     private record CreateAchFileResponse(Guid FileId, int BatchNumber);
 }
