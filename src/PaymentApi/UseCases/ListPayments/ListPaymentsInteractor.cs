@@ -7,8 +7,9 @@ public class ListPaymentsInteractor(IPaymentGateway paymentGateway) : IListPayme
     public async Task ListPaymentsAsync(IListPaymentsOutputBoundary presenter, ListPaymentsRequestModel request)
     {
         var payments = await paymentGateway.FindAllAsync();
-        var filtered = request.StatusFilter is not null
-            ? payments.Where(p => p.CurrentStatus == request.StatusFilter).ToList()
+        var statusFilter = request.StatusFilter?.Trim();
+        var filtered = !string.IsNullOrEmpty(statusFilter)
+            ? payments.Where(p => string.Equals(p.CurrentStatus, statusFilter, StringComparison.OrdinalIgnoreCase)).ToList()
             : payments;
 
         presenter.Present(new ListPaymentsResponseModel(filtered));

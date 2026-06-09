@@ -66,6 +66,8 @@ POST /files/inbound → AchReturnWorkflow
 | `Returned` | ACH return received |
 | `Representment` | Re-submitted after R01 return |
 
+`GET /payments?status=...` filters by the derived status name case-insensitively and ignores surrounding whitespace.
+
 ### Payment Request Validation
 
 `POST /payments` rejects invalid ACH payment input before starting a workflow. Amounts must be between `0.01` and `99,999,999.99`, routing numbers are required and must be exactly 9 digits, account numbers are required and limited to 17 characters, and account holder names are required and limited to 22 characters for NACHA output.
